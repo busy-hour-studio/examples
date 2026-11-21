@@ -50,6 +50,13 @@ export interface Session {
   user: User;
 }
 
+/** A follow (or block / mute) relationship, with the other user inline. */
+export interface Relationship {
+  kind: string;
+  createdAt: string;
+  user: User;
+}
+
 export interface FollowCounts {
   followers: number;
   following: number;
@@ -171,6 +178,17 @@ export interface ReactionResult {
   counts: Record<string, number>;
 }
 
+/** Everything about a target's reactions in one read. */
+export interface ReactionSummary {
+  /** Per-type totals, e.g. `{ like: 3 }`. */
+  counts: Record<string, number>;
+  groups: { type: string; count: number }[];
+  /** A few of the most recent reactions per type. */
+  latest: Record<string, Reaction[]>;
+  /** The caller's own reactions. */
+  own: Reaction[];
+}
+
 /** The things that can be reacted to, as they appear in the URL. */
 export const ReactionTarget = {
   ACTIVITY: "activities",
@@ -192,6 +210,16 @@ export interface Notification {
   readAt?: string | null;
   createdAt: string;
 }
+
+/** A device's platform, for push. */
+export const DevicePlatform = {
+  ANDROID: "android",
+  IOS: "ios",
+  WEB: "web",
+} as const;
+
+export type DevicePlatform =
+  (typeof DevicePlatform)[keyof typeof DevicePlatform];
 
 /** Who a notification goes to. */
 export const NotificationAudience = {

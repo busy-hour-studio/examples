@@ -67,6 +67,17 @@ export async function request<T>(
   return json as T;
 }
 
+/** A bound request: the client fills in the base URL and credentials. */
+export type ApiCall = <T>(
+  path: string,
+  init?: Omit<RequestOptions, "baseUrl" | "headers">
+) => Promise<T>;
+
+/** Unwrap a `{ data }` response. */
+export async function unwrap<T>(response: Promise<{ data: T }>): Promise<T> {
+  return (await response).data;
+}
+
 /** A unique id for idempotent creates. Retrying a send with the same
  *  `externalId` never posts the message twice. */
 export function newExternalId(): string {

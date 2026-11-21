@@ -1,9 +1,8 @@
-import { DEFAULT_BASE_URL, request } from "./http";
+import { type ApiCall, DEFAULT_BASE_URL, request, unwrap } from "./http";
 import {
   HttpMethod,
   type NotificationAudience,
   type NotificationSend,
-  type Resource,
   type Session,
 } from "./types";
 
@@ -40,11 +39,8 @@ export type SendNotificationInput = {
  * tokens for your signed-in users, and trigger notifications.
  */
 export function createServerClient(options: ServerClientOptions) {
-  const call = <T>(
-    path: string,
-    init: Omit<Parameters<typeof request>[1], "baseUrl" | "headers">
-  ) =>
-    request<T>(path, {
+  const call: ApiCall = (path, init = {}) =>
+    request(path, {
       ...init,
       baseUrl: options.baseUrl ?? DEFAULT_BASE_URL,
       headers: { "x-api-key": options.apiKey },
@@ -53,34 +49,33 @@ export function createServerClient(options: ServerClientOptions) {
   return {
     /** A short-lived session token for one of your users. Hand it to their
      *  client, which calls the API with it directly. */
-    async createSession(input: CreateSessionInput): Promise<Session> {
-      const res = await call<Resource<Session>>("/v1/sessions", {
-        method: HttpMethod.POST,
-        body: { projectId: options.projectId, ...input },
-      });
-      return res.data;
-    },
+    createSession: (input: CreateSessionInput): Promise<Session> =>
+      unwrap(
+        call<{ data: Session }>("/v1/sessions", {
+          method: HttpMethod.POST,
+          body: { projectId: options.projectId, ...input },
+        })
+      ),
 
     /** Notify some users, or everyone in the project. It lands in their inbox
      *  right away; the fan-out to many users happens in the background. */
-    async sendNotification(
+    sendNotification: (
       input: SendNotificationInput
-    ): Promise<NotificationSend> {
-      const { audience, title, body, data, push } = input;
-      const res = await call<Resource<NotificationSend>>("/v1/notifications", {
-        method: HttpMethod.POST,
-        body: {
-          projectId: options.projectId,
-          audience,
-          audienceUserIds: "userIds" in input ? input.userIds : undefined,
-          title,
-          body,
-          data,
-          push,
-        },
-      });
-      return res.data;
-    },
+    ): Promise<NotificationSend> =>
+      unwrap(
+        call<{ data: NotificationSend }>("/v1/notifications", {
+          method: HttpMethod.POST,
+          body: {
+            projectId: options.projectId,
+            audience: input.audience,
+            audienceUserIds: "userIds" in input ? input.userIds : undefined,
+            title: input.title,
+            body: input.body,
+            data: input.data,
+            push: input.push,
+          },
+        })
+      ),
   };
 }
 

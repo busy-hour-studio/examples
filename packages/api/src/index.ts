@@ -1,9 +1,14 @@
+export { chatApi } from "./chat";
+export { type FeedFilter, feedsApi } from "./feeds";
 export {
+  type ApiCall,
   BusyHourError,
   DEFAULT_BASE_URL,
   newExternalId,
   UNKNOWN_ERROR_CODE,
+  unwrap,
 } from "./http";
+export { notificationsApi } from "./notifications";
 export {
   connectConversation,
   type ConnectOptions,
@@ -20,7 +25,7 @@ export {
 export * from "./types";
 export {
   createUserClient,
-  type PageParams,
   type UserClient,
   type UserClientOptions,
 } from "./user";
+export { type PageParams, usersApi } from "./users";
