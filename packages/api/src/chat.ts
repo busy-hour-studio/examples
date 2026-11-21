@@ -20,8 +20,13 @@ export function chatApi(call: ApiCall) {
       }),
 
     /** Start a conversation. A DM is just a conversation with one other
-     *  member; the caller is always a member. */
-    create: (input: { name?: string; memberUserIds?: string[] }) =>
+     *  member; the caller is always a member. `attributes` is your own JSON,
+     *  stored with the conversation and returned on every read. */
+    create: (input: {
+      name?: string;
+      memberUserIds?: string[];
+      attributes?: Record<string, unknown>;
+    }) =>
       unwrap(
         call<{ data: { conversation: Conversation; members: Member[] } }>(
           "/v1/conversations",

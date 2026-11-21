@@ -10,10 +10,10 @@ Native.
 
 ## Two clients, two credentials
 
-|                      | Credential                 | Where it runs               | What it does                               |
-| -------------------- | -------------------------- | --------------------------- | ------------------------------------------ |
-| `createServerClient` | your **API key**           | your backend only           | mint session tokens, trigger notifications |
-| `createUserClient`   | a user's **session token** | browser, mobile, or backend | chat, feed, inbox, as that user            |
+|                      | Credential                 | Where it runs               | What it does                                             |
+| -------------------- | -------------------------- | --------------------------- | -------------------------------------------------------- |
+| `createServerClient` | your **API key**           | your backend only           | mint session tokens, upsert users, trigger notifications |
+| `createUserClient`   | a user's **session token** | browser, mobile, or backend | chat, feed, inbox, as that user                          |
 
 ```ts
 import {

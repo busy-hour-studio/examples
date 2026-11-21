@@ -42,8 +42,13 @@ export function feedsApi(call: ApiCall) {
     get: (activityId: string) =>
       unwrap(call<{ data: Activity }>(`/v1/activities/${activityId}`)),
 
-    /** Post to the feed as the caller. */
-    create: (input: { verb: string; body?: string }) =>
+    /** Post to the feed as the caller. `attributes` is your own JSON, stored
+     *  with the activity and returned on every read. */
+    create: (input: {
+      verb: string;
+      body?: string;
+      attributes?: Record<string, unknown>;
+    }) =>
       unwrap(
         call<{ data: Activity }>("/v1/activities", {
           method: HttpMethod.POST,
