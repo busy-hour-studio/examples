@@ -190,8 +190,10 @@ function ActivityCard({
       setComments(null);
       return;
     }
+    // The API returns the newest comments first; show them oldest first, so
+    // the thread reads top to bottom and a new comment lands by the reply box.
     const page = await client.feeds.comments(activity.id, { limit: 50 });
-    setComments(page.data);
+    setComments([...page.data].reverse());
   }
 
   async function comment(event: SubmitEvent<HTMLFormElement>) {
