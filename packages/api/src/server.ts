@@ -4,6 +4,7 @@ import {
   type NotificationAudience,
   type NotificationSend,
   type Session,
+  type User,
 } from "./types";
 
 export interface ServerClientOptions {
@@ -36,7 +37,10 @@ export type SendNotificationInput = {
 
 /**
  * Calls made with your API key. Use them from your backend only: mint session
- * tokens for your signed-in users, and trigger notifications.
+ * tokens for your signed-in users, upsert users, and trigger notifications.
+ *
+ * The key needs the matching scopes: `sessions:write`, `users:write`,
+ * `notifications:write`.
  */
 export function createServerClient(options: ServerClientOptions) {
   const call: ApiCall = (path, init = {}) =>
@@ -54,6 +58,17 @@ export function createServerClient(options: ServerClientOptions) {
         call<{ data: Session }>("/v1/sessions", {
           method: HttpMethod.POST,
           body: { projectId: options.projectId, ...input },
+        })
+      ),
+
+    /** Create a user, or update the one with this `externalId`, and return
+     *  them. Handy for addressing someone who hasn't signed in yet, e.g.
+     *  starting a DM with them. Needs the `users:write` scope. */
+    upsertUser: (input: CreateSessionInput): Promise<User> =>
+      unwrap(
+        call<{ data: User }>(`/v1/projects/${options.projectId}/users`, {
+          method: HttpMethod.POST,
+          body: input,
         })
       ),
 

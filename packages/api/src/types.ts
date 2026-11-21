@@ -43,6 +43,15 @@ export interface User {
   createdAt: string;
 }
 
+/** The compact profile embedded on activities, comments, messages and
+ *  members, so you can render an author without a separate lookup. */
+export interface UserSummary {
+  id: string;
+  externalId: string;
+  displayName?: string | null;
+  avatarUrl?: string | null;
+}
+
 /** What `POST /v1/sessions` returns: a short-lived token for one end user. */
 export interface Session {
   token: string;
@@ -115,6 +124,8 @@ export interface ConversationListItem {
 export interface Member {
   id: string;
   userId: string;
+  /** The member's profile. */
+  user: UserSummary;
   role: ConversationRole;
   joinedAt: string;
   lastReadSequence: number;
@@ -124,6 +135,8 @@ export interface Message {
   id: string;
   conversationId: string;
   senderId: string | null;
+  /** The sender's profile; `null` for system messages and deleted users. */
+  sender: UserSummary | null;
   /** Per-conversation, gap-free ordering. History pages by it. */
   sequence: number;
   externalId: string;
@@ -141,6 +154,8 @@ export interface Message {
 export interface Activity {
   id: string;
   userId: string;
+  /** The author's profile; `null` if they've been deleted. */
+  user: UserSummary | null;
   /** What kind of activity this is, e.g. `post`. You choose the verbs. */
   verb: string;
   body: string;
@@ -156,6 +171,8 @@ export interface Comment {
   id: string;
   activityId: string;
   userId: string;
+  /** The commenter's profile; `null` if they've been deleted. */
+  user: UserSummary | null;
   parentId?: string | null;
   body: string;
   reactionCounts: Record<string, number>;

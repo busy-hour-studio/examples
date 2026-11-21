@@ -1,4 +1,6 @@
 import js from "@eslint/js";
+import nextPlugin from "@next/eslint-plugin-next";
+import reactHooks from "eslint-plugin-react-hooks";
 import globals from "globals";
 import tseslint from "typescript-eslint";
 
@@ -9,7 +11,8 @@ export default tseslint.config(
       "**/dist/**",
       "**/.next/**",
       "**/.expo/**",
-      "*.config.*",
+      "**/next-env.d.ts",
+      "**/*.config.*",
     ],
   },
   js.configs.recommended,
@@ -45,6 +48,25 @@ export default tseslint.config(
         "error",
         { allowNumber: true },
       ],
+    },
+  },
+  // React apps: the rules of hooks.
+  {
+    files: ["apps/**/*.{ts,tsx}"],
+    plugins: { "react-hooks": reactHooks },
+    rules: {
+      "react-hooks/rules-of-hooks": "error",
+      "react-hooks/exhaustive-deps": "error",
+    },
+  },
+  // The Next.js app: Next's own recommended + Core Web Vitals rules.
+  {
+    files: ["apps/nextjs/**/*.{ts,tsx}"],
+    plugins: { "@next/next": nextPlugin },
+    settings: { next: { rootDir: "apps/nextjs" } },
+    rules: {
+      ...nextPlugin.configs.recommended.rules,
+      ...nextPlugin.configs["core-web-vitals"].rules,
     },
   }
 );

@@ -3,12 +3,12 @@
 Runnable examples for [BusyHour](https://busyhour.id): in-app chat, activity
 feeds and notifications over plain REST + WebSockets, with no SDK.
 
-| Example                          | What it shows                                                                                                  |
-| -------------------------------- | -------------------------------------------------------------------------------------------------------------- |
-| [`packages/api`](./packages/api) | The API calls the apps share: typed `fetch` wrappers and the WebSocket helper. Not an SDK; copy what you need. |
-| Next.js full-stack app           | Coming soon                                                                                                    |
-| React (Vite) + Hono on Bun       | Coming soon                                                                                                    |
-| Expo mobile app                  | Coming soon                                                                                                    |
+| Example                                 | What it shows                                                                                                                                   |
+| --------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
+| [`packages/api`](./packages/api)        | The API calls the apps share: typed `fetch` wrappers and the WebSocket helper. Not an SDK; copy what you need.                                  |
+| [Next.js full-stack app](./apps/nextjs) | Route handlers mint session tokens and send notifications with the API key; the browser does chat, the feed and the inbox with the user's token |
+| React (Vite) + Hono on Bun              | Coming soon                                                                                                                                     |
+| Expo mobile app                         | Coming soon                                                                                                                                     |
 
 Each app covers the basics: **chat**, an **activity feed** and a
 **notification inbox**.
