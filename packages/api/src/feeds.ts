@@ -73,7 +73,8 @@ export function feedsApi(call: ApiCall) {
 
     // ── Comments ─────────────────────────────────────────────────────────────
 
-    /** Top-level comments; pass `parentId` for the replies to one comment. */
+    /** Top-level comments, newest first; pass `parentId` for the replies to
+     *  one comment. */
     comments: (
       activityId: string,
       filter: { parentId?: string } & PageParams = {}
