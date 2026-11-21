@@ -1,0 +1,11 @@
+{
+  "name": "@examples/api",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "typecheck": "bun check"
+  }
+}
